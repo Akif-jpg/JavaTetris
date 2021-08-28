@@ -42,16 +42,13 @@ public abstract class Shape implements Cloneable{
 			tMass += i; 
 		}
 		double tCenterMass = ((double) tMass)/ ((double) length);
-		System.out.println("tCenterMass: " + tCenterMass);
 		int Mass = 0;
 		for(int i:xArray) {
 			Mass += i; 
 		}
 		double CenterMass = ((double) Mass)/ ((double) length);
-		System.out.println("CenterMass: " + CenterMass);
 		
 		double deltaCenterMass = tCenterMass - CenterMass;
-		System.out.println("deltaCenterMass: " + Math.round(deltaCenterMass));
 		
 		this.dX -= Math.round(deltaCenterMass);
 	}
@@ -101,12 +98,25 @@ public abstract class Shape implements Cloneable{
 
 	}
 	
+	public int getShapeWidth() {
+		int rectXPosition[] = new int[rectangleList.length];
+		for (int i = 0; i < rectXPosition.length; i++) {
+			try {
+				rectXPosition[i] = ((Rectangle) rectangleList[i].clone()).getX();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		Arrays.sort(rectXPosition);
+		return Math.abs(rectXPosition[rectXPosition.length-1]-rectXPosition[0])+1;
+	}
 	public void moveR() {
 		this.dX += 1;
 	}
 
 	public void moveL() {
-		this.dY -= 1;
+		this.dX -= 1;
 	}
 	
 	public void moveD() {

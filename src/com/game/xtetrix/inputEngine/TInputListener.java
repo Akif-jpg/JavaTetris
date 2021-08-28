@@ -17,18 +17,23 @@ public class TInputListener implements KeyListener{
 		switch(arg0.getKeyCode()) {
 			case KeyEvent.VK_LEFT:{
 				moveLeft= true;	
-			}
+				break;
+				}
 			case KeyEvent.VK_DOWN:{
 				moveDown= true;
+				break;
 			}
 			case KeyEvent.VK_RIGHT:{
 				moveRight= true;
+				break;
 			}
 			case KeyEvent.VK_S:{
 				turnLeft= true;
+				break;
 			}
 			case KeyEvent.VK_D:{
 				turnRight= true;
+				break;
 			}
 		}	
 	}
@@ -60,31 +65,26 @@ public class TInputListener implements KeyListener{
 		
 		
 	}
+	
+	public boolean isTurnRight() {
+		return turnRight;
+	}
 
 	public boolean isMoveRight() {
 		return moveRight;
 	}
 
-
 	public boolean isMoveLeft() {
 		return moveLeft;
 	}
-
-
 
 	public boolean isMoveDown() {
 		return moveDown;
 	}
 
-
-	public boolean isTurnRight() {
-		return turnRight;
-	}
-
-
-
 	public boolean isTurnLeft() {
 		return turnLeft;
 	}
+
 
 }

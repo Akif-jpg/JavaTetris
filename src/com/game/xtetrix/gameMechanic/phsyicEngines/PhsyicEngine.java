@@ -7,16 +7,26 @@ import com.game.xtetrix.gameMechanic.shapes.Shape;
 import com.game.xtetrix.inputEngine.TInputListener;
 
 public class PhsyicEngine implements Runnable{
-	protected Shape shape;
+	protected Shape shape = null;
 	protected Rectangle[] gameMap;
 	
 	protected int mapWidth;
 	protected int mapHeight;
-	
-	protected int FPS = 30;
-	protected int currentFPS = FPS;
 
 	protected TInputListener inputListener;
+	
+	//Variables for FPS Control
+	protected int FPS = 30;
+	protected int currentFPS = FPS;
+	
+	private int counter = 0;	
+	private long fpsTime = System.currentTimeMillis();
+	private long startTime = 0;
+	private long endTime = 0;
+	private long cycleTime = 0;
+	private long expectedTime = (long) Math.pow(10, 3)/FPS;	
+	
+
 	public PhsyicEngine() {
 		gameMap = new Rectangle[GameConsts.StandartMapWidth*GameConsts.StandartMapHeight];		
 		mapWidth = GameConsts.StandartMapWidth;
@@ -36,12 +46,42 @@ public class PhsyicEngine implements Runnable{
 			gameMap[i] = new Rectangle(Math.floorMod(i, mapWidth), i/mapWidth);
 		}
 	}
+	
+	protected void headerFPSController() {
+		startTime = System.currentTimeMillis();
+		counter++;
+		if(System.currentTimeMillis() - fpsTime>1000) {
+			currentFPS = counter;
+			counter = 0;
+			fpsTime = System.currentTimeMillis();	
+		}
+	}
+	
+	protected void footerFPSController() {
+		endTime = System.currentTimeMillis();
+		cycleTime = endTime-startTime;
+		expectedTime = (long) Math.pow(10, 3)/FPS;
+		if(expectedTime - cycleTime > 0) {
+			try {
+				Thread.sleep(expectedTime-cycleTime);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
-	private boolean isBump(Shape shape) {				
-		for(int i = 0;i < shape.getRectangleList().length;i++) {			
-			for(int i2 = 0;i2 < gameMap.length;i2++) {
-				if(shape.getRectangleList()[i].getX() == gameMap[i2].getX()
-						&&shape.getRectangleList()[i].getY() == gameMap[i2].getY()) {
+	protected boolean isBumpanyShape(Shape shape) {	
+		int rectXPosition;
+		int rectYPosition;
+		int columnNumber;
+		for(Rectangle rect:shape.getRectangleList()) {
+			rectXPosition = rect.getX()+shape.getDx();
+			rectYPosition = rect.getY()+shape.getDy();			
+			columnNumber = (rectYPosition)*mapWidth+rectXPosition;
+			
+			if(columnNumber < gameMap.length&&columnNumber>0) {
+				if(gameMap[columnNumber].isThere) {
 					return true;
 				}
 			}
@@ -49,10 +89,22 @@ public class PhsyicEngine implements Runnable{
 		return false;
 	}
 	
+	protected boolean isBumpBottom(Shape shape) {
+		int rectYPosition;
+		for(Rectangle rect:shape.getRectangleList()) {
+			rectYPosition = rect.getY()+shape.getDy();	
+			if(rectYPosition < 1) {
+				return true;
+			}			
+			
+		}
+		return false;
+	}
+	
 	public void moveDown() throws CloneNotSupportedException {
-		Shape iShape = (Shape) this.shape.clone();
-		iShape.moveD();
-		if(!isBump(iShape)) {
+		Shape instanceShape = (Shape) this.shape.clone();
+		instanceShape.moveD();
+		if(!isBumpBottom(this.shape)&&!isBumpanyShape(instanceShape)) {
 			this.shape.moveD();
 		}
 	}
