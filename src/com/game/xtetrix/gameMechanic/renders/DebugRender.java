@@ -26,6 +26,7 @@ public class DebugRender implements IGameRender {
 		gameMap = new BufferedImage(resolutionX, resolutionY,BufferedImage.TYPE_INT_RGB);		
 		
 		mapPencil = gameMap.createGraphics();
+		mapPencil.setFont(new Font("TimesRoman", Font.PLAIN, 16));
 		
 		 x = 0;
 		 y = 0;
@@ -48,7 +49,27 @@ public class DebugRender implements IGameRender {
 		}
 	}
 	
-	private void drawGame(PhsyicEngine phsyicEngine) {
+	private void drawGame(PhsyicEngine phsyicEngine) {			
+			drawGameMap(phsyicEngine);
+			drawShape(phsyicEngine);
+	}
+	
+	private void drawShape(PhsyicEngine phsyicEngine) {
+			
+		mapPencil.setColor(new Color( 0.1f, 0.1f, 0.9f, 0.75f));
+		if(phsyicEngine.getShape() != null) {
+			Rectangle[] rectangles = phsyicEngine.getShape().getRectangleList();
+			Shape shape = phsyicEngine.getShape();
+			for (Rectangle rectangle : rectangles) {				
+				mapPencil.fillRect((rectangle.getX()+shape.getDx())*resolutionX/10, +resolutionY-resolutionY/20-((rectangle.getY()+shape.getDy())*resolutionY/20),
+							resolutionX/10, resolutionY/20);					
+						
+			}
+		}
+	}
+	
+	private void drawGameMap(PhsyicEngine phsyicEngine) {
+		mapPencil.setColor(Color.gray);
 		if(phsyicEngine != null) {
 			Rectangle[] rectangles = phsyicEngine.getGameMap();
 			for (Rectangle rectangle : rectangles) {
@@ -58,23 +79,11 @@ public class DebugRender implements IGameRender {
 				}				
 			}			
 		}
-		
-		if(phsyicEngine.getShape() != null) {
-			Rectangle[] rectangles = phsyicEngine.getShape().getRectangleList();
-			Shape shape = phsyicEngine.getShape();
-			for (Rectangle rectangle : rectangles) {
-				
-				mapPencil.fillRect((rectangle.getX()+shape.getDx())*resolutionX/10, +resolutionY-resolutionY/20-((rectangle.getY()+shape.getDy())*resolutionY/20),
-							resolutionX/10, resolutionY/20);					
-						
-			}
-		}
-		
 	}
 	
 	private void drawFPS(Graphics g,PhsyicEngine phsyicEngine) {
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
-		g.drawString("FPS: " + phsyicEngine.getCurrentFPS(),40,16);
+		mapPencil.setColor(new Color(0.2f, 0.6f, 0.2f, 0.9f));
+		mapPencil.drawString("FPS: " + phsyicEngine.getCurrentFPS(),10,16);
 	}
 	@Override
 	public void render(Graphics g, PhsyicEngine phsyicEngine) {
@@ -83,13 +92,10 @@ public class DebugRender implements IGameRender {
 		mapPencil.setColor(Color.BLACK);
 		drawColumns();
 		drawRows();
-		drawGame(phsyicEngine);		
+		drawGame(phsyicEngine);	
 		
-		g.drawImage(gameMap, x, y, width, height, null);
-		
-		drawFPS(g, phsyicEngine);
-		
-		
+		drawFPS(g, phsyicEngine);		
+		g.drawImage(gameMap, x, y, width, height, null);		
 		
 	}
 
