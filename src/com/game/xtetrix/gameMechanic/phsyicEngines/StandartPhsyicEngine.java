@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.game.xtetrix.gameMechanic.shapes.Shape;
 import com.game.xtetrix.gameMechanic.shapes.usualShapes.*;
-import com.game.xtetrix.inputEngine.TInputListener;
 
 import bago.bLogging.Logger;
 import bago.exception.NotFoundInputListener;
@@ -12,6 +11,7 @@ import bago.exception.NotFoundInputListener;
 public class StandartPhsyicEngine extends PhsyicEngine {
 
 	Logger logger;
+	boolean isAlive = true;
 	
 	public StandartPhsyicEngine() {
 		super();
@@ -91,6 +91,8 @@ public class StandartPhsyicEngine extends PhsyicEngine {
 		}
 		
 	}
+	
+		
 	@Override
 	public void run() {		
 	   int loopCounter = 0;
@@ -101,50 +103,62 @@ public class StandartPhsyicEngine extends PhsyicEngine {
 		createRandomShape();
 		while(true) {
 			this.headerFPSController();
-			loopCounter++;
-			loopCounter_1++;
-			
-			if(this.inputListener == null) {
-				throw new NotFoundInputListener("input listener is null");
-			}
-			if(loopCounter > eachLoop) {
-				loopCounter = 0;
-	
-		  		try {
-					moveDown();
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}			  		
-
-			}	
-			
-			if(loopCounter_1 > eachLoop_1) {
-				loopCounter_1 = 0;
+			if(isAlive) {				
+				loopCounter++;
+				loopCounter_1++;
 				
-				if(inputListener.isMoveRight()) {				
-					this.shape.moveR();
-				}else if(inputListener.isMoveLeft()) {
-					this.shape.moveL();
-				}else {
-					Shape instanceShape;
-					try {
-						instanceShape = (Shape) this.shape.clone();
-						instanceShape.moveD();
-						if(isBumpBottom(this.shape)||isBumpanyShape(instanceShape)) {
-							//shapeToGameMap(this.shape);
-							createRandomShape();
-						}
+				if(this.inputListener == null) {
+					throw new NotFoundInputListener("input listener is null");
+				}
+				if(loopCounter > eachLoop) {
+					loopCounter = 0;
+		
+			  		try {
+						moveDown(this.shape);					
 					} catch (CloneNotSupportedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}	
-				}
+					}			  		
+	
+				}	
+				
+				if(loopCounter_1 > eachLoop_1) {
+					loopCounter_1 = 0;
+					
+					if(inputListener.isMoveRight() && this.canMoveRight(this.shape)) {						
+						this.shape.moveR();
+					
+					}else if(inputListener.isMoveLeft() && canMoveLeft(this.shape)) {					
+						this.shape.moveL();
+					
+					}else {
+						Shape instanceShape;
+						try {
+							instanceShape = (Shape) this.shape.clone();
+							instanceShape.moveD();
+							if(isBumpBottom(this.shape)||isBumpanyShape(instanceShape)) {
+								
+								shapeToGameMap(this.shape);
+								MapEngine.destroyColumns(gameMap, this.mapWidth,this.mapHeight);
+								this.shape = new RectShape();
+								shape.moveShape(5, 20);
+							}
+						} catch (CloneNotSupportedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}	
+					}
+				}						
+	
 			}
-			
+			if(inputListener.isPressX()) {
+				isAlive=false;
+			}else {
+				isAlive = true;
+			}
 
 			
-			this.footerFPSController();			
+			this.footerFPSController();		
 		}
 		
 	}

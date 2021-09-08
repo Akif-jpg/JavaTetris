@@ -101,17 +101,62 @@ public class PhsyicEngine implements Runnable{
 		return false;
 	}
 	
-	public void moveDown() throws CloneNotSupportedException {
-		Shape instanceShape = (Shape) this.shape.clone();
+	protected boolean isBumpRightWall(Shape shape) {
+		int rectXPosition;
+		for(Rectangle rect:shape.getRectangleList()) {
+			rectXPosition = rect.getX() + shape.getDx();
+			
+			if(rectXPosition == mapWidth-1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean isBumpLeftWall(Shape shape) {
+		int rectXPosition;
+		for(Rectangle rect:shape.getRectangleList()) {
+			rectXPosition = rect.getX() + shape.getDx();
+			
+			if(rectXPosition == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void moveDown(Shape shape) throws CloneNotSupportedException {
+		Shape instanceShape = (Shape) shape.clone();
 		instanceShape.moveD();
-		if(!isBumpBottom(this.shape)&&!isBumpanyShape(instanceShape)) {
+		if(!isBumpBottom(shape)&&!isBumpanyShape(instanceShape)) {
 			this.shape.moveD();
 		}
 	}
-	@Override
-	public void run() {	
-		
+	
+	public boolean canMoveLeft(Shape shape) {
+		Shape instanceShape = null;
+		try {
+			instanceShape = (Shape) shape.clone();
+			instanceShape.moveL();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return !isBumpLeftWall(shape)&&!isBumpanyShape(instanceShape);
 	}
+	
+	public boolean canMoveRight(Shape shape) {
+		Shape instanceShape = null;
+		try {
+			instanceShape = (Shape) shape.clone();
+			instanceShape.moveR();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return !isBumpRightWall(shape)&&!isBumpanyShape(instanceShape);
+	}
+	
 
 	public Shape getShape() {
 		return shape;
@@ -144,6 +189,11 @@ public class PhsyicEngine implements Runnable{
 	
 	public void setInputListener(TInputListener inputListener) {
 		this.inputListener = inputListener;
+	}
+	
+	@Override
+	public void run() {	
+		
 	}
 	
 }

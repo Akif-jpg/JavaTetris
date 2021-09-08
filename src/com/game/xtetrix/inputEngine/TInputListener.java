@@ -10,6 +10,7 @@ public class TInputListener implements KeyListener{
 	private boolean moveDown;
 	private boolean turnRight;
 	private boolean turnLeft;
+	private boolean pressX = false;
 	
 
 	@Override
@@ -34,6 +35,13 @@ public class TInputListener implements KeyListener{
 			case KeyEvent.VK_D:{
 				turnRight= true;
 				break;
+			}
+			case KeyEvent.VK_X:{
+				if(pressX) {
+					pressX = false;
+				}else {
+					pressX = true;
+				}
 			}
 		}	
 	}
@@ -84,6 +92,10 @@ public class TInputListener implements KeyListener{
 
 	public boolean isTurnLeft() {
 		return turnLeft;
+	}
+	
+	public boolean isPressX() {
+		return pressX;
 	}
 
 
