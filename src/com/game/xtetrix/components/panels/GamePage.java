@@ -19,7 +19,7 @@ public class GamePage extends Page implements ActionListener {
 	//Variables for game 
 	private IGameRender gameRender;
 	private StandartPhsyicEngine phsyicEngine;
-	private TInputListener inputListener;
+	private TInputListener inputListener = null; 
 	
 	private Logger logger;
 	private boolean firstCycle = true;

@@ -90,10 +90,9 @@ public class DebugRender implements IGameRender {
 		// TODO Auto-generated method stub
 		cleanMap();
 		mapPencil.setColor(Color.BLACK);
+		drawGame(phsyicEngine);	
 		drawColumns();
 		drawRows();
-		drawGame(phsyicEngine);	
-		
 		drawFPS(g, phsyicEngine);		
 		g.drawImage(gameMap, x, y, width, height, null);		
 		
