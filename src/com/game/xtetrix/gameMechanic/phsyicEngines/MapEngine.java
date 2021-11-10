@@ -2,6 +2,7 @@ package com.game.xtetrix.gameMechanic.phsyicEngines;
 
 import com.game.xtetrix.gameMechanic.shapes.Rectangle;
 
+//Calculation about map
 public class MapEngine {
 
 	public static Rectangle[] getColumn(Rectangle[] gameMap ,int mapWidth,int columnNumber) {

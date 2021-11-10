@@ -157,6 +157,37 @@ public class PhsyicEngine implements Runnable{
 		return !isBumpRightWall(shape)&&!isBumpanyShape(instanceShape);
 	}
 	
+	
+	
+	public boolean canTurnLeft(Shape shape) {
+		Rectangle[] rectangles = this.shape.getRectangleList().clone();
+		Shape instanceShape = new Shape() {
+			@Override
+			public void setRectangleList(Rectangle[] rectangleList) {
+				// TODO Auto-generated method stub				
+				super.setRectangleList(rectangleList);
+			}
+		};
+		instanceShape.setRectangleList(rectangles);
+		instanceShape.turnL();
+		return !(isBumpLeftWall(instanceShape)&&isBumpRightWall(instanceShape)&&isBumpanyShape(instanceShape));
+	}
+	
+	public boolean canTurnRight(Shape shape) {
+		Rectangle[] rectangles = this.shape.getRectangleList().clone();
+		Shape instanceShape = new Shape() {
+			@Override
+			public void setRectangleList(Rectangle[] rectangleList) {
+				// TODO Auto-generated method stub				
+				super.setRectangleList(rectangleList);
+			}
+		};
+		instanceShape.setRectangleList(rectangles);
+		instanceShape.turnR();
+		return !(isBumpLeftWall(instanceShape)&&isBumpRightWall(instanceShape)&&isBumpanyShape(instanceShape));
+	}
+
+
 
 	public Shape getShape() {
 		return shape;

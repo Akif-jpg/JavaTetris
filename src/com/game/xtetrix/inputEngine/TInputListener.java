@@ -10,7 +10,7 @@ public class TInputListener implements KeyListener{
 	private boolean moveDown;
 	private boolean turnRight;
 	private boolean turnLeft;
-	private boolean pressX = false;
+	private boolean pressEscape = false;
 	
 
 	@Override
@@ -36,12 +36,13 @@ public class TInputListener implements KeyListener{
 				turnRight= true;
 				break;
 			}
-			case KeyEvent.VK_X:{
-				if(pressX) {
-					pressX = false;
+			case KeyEvent.VK_ESCAPE:{
+				if(pressEscape) {
+					pressEscape = false;
 				}else {
-					pressX = true;
+					pressEscape = true;
 				}
+				break;
 			}
 		}	
 	}
@@ -51,18 +52,23 @@ public class TInputListener implements KeyListener{
 		switch(arg0.getKeyCode()) {
 			case KeyEvent.VK_LEFT:{
 				moveLeft= false;
+				break;
 			}
 			case KeyEvent.VK_DOWN:{
 				moveDown= false;
+				break;
 			}
 			case KeyEvent.VK_RIGHT:{
 				moveRight= false;
+				break;
 			}
 			case KeyEvent.VK_S:{
 				turnLeft= false;
+				break;
 			}
 			case KeyEvent.VK_D:{
 				turnRight= false;
+				break;
 			}
 		}
 		
@@ -70,7 +76,7 @@ public class TInputListener implements KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		
+	
 		
 	}
 	
@@ -94,8 +100,8 @@ public class TInputListener implements KeyListener{
 		return turnLeft;
 	}
 	
-	public boolean isPressX() {
-		return pressX;
+	public boolean isPressEscape() {
+		return pressEscape;
 	}
 
 
