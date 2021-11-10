@@ -100,6 +100,10 @@ public class StandartPhsyicEngine extends PhsyicEngine {
 	   
 		int loopCounter_1 = 0;
 		int eachLoop_1 = 10;
+		
+		if(this.inputListener == null) {
+			throw new NotFoundInputListener("input listener is null");
+		}
 		createRandomShape();
 		while(true) {
 			this.headerFPSController();
@@ -107,23 +111,29 @@ public class StandartPhsyicEngine extends PhsyicEngine {
 				loopCounter++;
 				loopCounter_1++;
 				
-				if(this.inputListener == null) {
-					throw new NotFoundInputListener("input listener is null");
-				}
+
 				if(loopCounter > eachLoop) {
 					loopCounter = 0;
 		
 			  		try {
-						moveDown(this.shape);					
+						moveDown(this.shape);			
 					} catch (CloneNotSupportedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}			  		
-	
+					}	
+			  		
+			  		if(inputListener.isTurnLeft()&&canTurnLeft(this.shape)) {
+			  			this.shape.turnL();
+					}
+					
+					if(inputListener.isTurnRight()&&canTurnRight(this.shape)) {
+						this.shape.turnR();
+					}
+			  		
 				}	
 				
 				if(loopCounter_1 > eachLoop_1) {
-					loopCounter_1 = 0;
+					loopCounter_1 = 0;							
 					
 					if(inputListener.isMoveRight() && this.canMoveRight(this.shape)) {						
 						this.shape.moveR();
@@ -140,8 +150,7 @@ public class StandartPhsyicEngine extends PhsyicEngine {
 								
 								shapeToGameMap(this.shape);
 								MapEngine.destroyColumns(gameMap, this.mapWidth,this.mapHeight);
-								this.shape = new RectShape();
-								shape.moveShape(5, 20);
+								createRandomShape();
 							}
 						} catch (CloneNotSupportedException e) {
 							// TODO Auto-generated catch block
@@ -151,7 +160,7 @@ public class StandartPhsyicEngine extends PhsyicEngine {
 				}						
 	
 			}
-			if(inputListener.isPressX()) {
+			if(inputListener.isPressEscape()) {
 				isAlive=false;
 			}else {
 				isAlive = true;
